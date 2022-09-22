@@ -1,0 +1,4 @@
+# vars file for
+---
+service: mdatp
+service_port: 80

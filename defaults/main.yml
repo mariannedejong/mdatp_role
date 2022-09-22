@@ -1,0 +1,6 @@
+# defaults file for mdatp
+---
+desired_state: present
+package:
+  - yum-utils
+  - mdatp

@@ -1,0 +1,28 @@
+# Tasks to reach desired state present
+---
+- name: Configure Microsoft Repository
+  become: true
+  ansible.builtin.command: "yum-config-manager --add-repo=https://packages.microsoft.com/config/rhel/8/prod.repo"
+  changed_when: false
+
+- name: Install key
+  become: true
+  ansible.builtin.command: "rpm --import http://packages.microsoft.com/keys/microsoft.asc"
+  changed_when: false
+
+- name: Manage package
+  ansible.builtin.package:
+    name: "{{ item }}"
+    state: "{{ desired_state }}"
+    update_cache: true
+  become: true
+  with_items: "{{ package }}"
+  notify: Control service
+
+- name: Enable service
+  ansible.builtin.systemd:
+    name: mdatp
+    enabled: true
+    daemon_reload: true
+  become: true
+  notify: Control service
